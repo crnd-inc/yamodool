@@ -1,0 +1,9 @@
+*.py[cow]
+*.sw[pmnlo]
+*.log
+/build/
+/dist/
+/venv/
+.coverage
+.coverage.*
+yamodool.egg-info/

@@ -1,0 +1,6 @@
+name: my.model.name.2
+fields:
+    test_field_2:
+        type: Many2one
+        string: Test relational field
+        comodel_name: res.users
