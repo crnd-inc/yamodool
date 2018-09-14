@@ -1,0 +1,26 @@
+name: my.super.model
+order: sequence ASC
+fields:
+    sequence:
+        type: Integer
+        default: 5
+    active:
+        type: Boolean
+        default: true
+        index: true
+    name:
+        type: Char
+        required: true
+        index: true
+        translate: true
+        help: Record name
+    contact_id:
+        type: Many2one
+        required: true
+        comodel_name: res.users
+    contact_type:
+        type: Selection
+        selection:
+            - Address
+            - Contact
+            - Company
