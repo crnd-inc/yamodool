@@ -2,6 +2,21 @@
 
 YAML models of Odoo
 
+## Installation
+
+Install with:
+
+```bash
+pip install -e git+git@gitlab.crnd.pro:crnd/yamodool.git#egg=yamodool
+```
+
+or
+
+```bash
+pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
+```
+
+
 ## Usage
 
 
