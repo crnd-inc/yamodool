@@ -40,11 +40,40 @@ class YAModool(object):
         for field_name, field_attrs in self.yml_data['fields'].items():
             self.add_model_field(field_name, field_attrs)
 
+    def add_uniq_constraint(self, name, constraint):
+        self.model_attrs.setdefault('_sql_constraints', [])
+        self.model_attrs['_sql_constraints'].append((
+            name,
+            'UNIQUE (%s)' % ', '.join(constraint['fields']),
+            constraint['message'],
+        ))
+
+    def add_check_constraint(self, name, constraint):
+        self.model_attrs.setdefault('_sql_constraints', [])
+        self.model_attrs['_sql_constraints'].append((
+            name,
+            'CHECK (%s)' % constraint['check'],
+            constraint['message'],
+        ))
+
+    def add_constraints(self):
+        if 'constraints' not in self.yml_data:
+            return
+        for name, constraint in self.yml_data['constraints'].items():
+            if constraint['type'] == 'unique':
+                self.add_uniq_constraint(name, constraint)
+            elif constraint['type'] == 'check':
+                self.add_check_constraint(name, constraint)
+            else:
+                raise YAModoolError(
+                    "Unsupported constraint type %s" % constraint['type'])
+
     def parse_yml_data(self):
         _logger.info("Parsing yamodool data: %r", self.file_path)
         self.add_optional_attr('_name', 'name')
         self.add_optional_attr('_order', 'order')
         self.add_fields()
+        self.add_constraints()
         _logger.info("yamodool data parsed: %r", self.file_path)
 
     def generate_model(self, module):
@@ -57,14 +86,9 @@ class YAModool(object):
                 self.file_path, exc_info=True)
             raise YAModoolError(str(exc))
 
-        # Update model's module
+        # Update model's module. This is required to register model in registry
         self.model_attrs['__module__'] = module
 
-        # Create mixin class that contain all required attribute.
-        # Here we use mixin, because when model class created via *type* it
-        # will not be registered in registry.
-        # TODO: investigate why
-        # mixin_cls = type('YAModool', (object,), self.model_attrs)
         YAModoolModel = type(
             'yamodool',
             (odoo.models.Model,),
@@ -79,7 +103,14 @@ class YAModool(object):
 
 
 def load_yamodool(path=None):
-    """ Load YAModool model by file path
+    """ Load YAModool model.
+
+        - If path is not specified, yamodool will try to
+          guess it based on calling context
+        - If path points to file, then that file will be parsed
+        - if path points to directory, then yamodool will look for .yml files
+          in that directory and try to build model for each file.
+          All files in that directory must be valid yamodool models.
     """
     # Guess module name
     module = inspect.stack()[1][0].f_locals['__name__']

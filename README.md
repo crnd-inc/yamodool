@@ -41,6 +41,16 @@ YAML models of Odoo
                 - Address
                 - Contact
                 - Company
+    constraints:
+        unique_name:
+            type: unique
+            fields:
+                - name
+            message: Name must be unique
+        ascii_name:
+            type: check
+            check: 'name ~ ''^[a-zA-Z0-9\-_]*$'''
+            message: Name must be ascii only
     ```
 4. Add `dependencies` section to addon's manifest file
     ```python
