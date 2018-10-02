@@ -11,18 +11,17 @@ Current project stage is *Proof of Concept*:
 
 ## Installation
 
-Install with:
+Install with pip:
 
 ```bash
-pip install -e git+git@gitlab.crnd.pro:crnd/yamodool.git#egg=yamodool
+pip install -e git+https://github.com/crnd-inc/yamodool.git#egg=yamodool
 ```
 
-or
+or add line to `requirements.txt`:
 
-```bash
-pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
 ```
-
+-e git+https://github.com/crnd-inc/yamodool.git#egg=yamodool
+```
 
 ## Usage
 
@@ -57,7 +56,7 @@ pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
         contact_id:
             type: Many2one
             required: true
-            comodel_name: res.users
+            comodel_name: res.partner
         contact_type:
             type: Selection
             selection:
