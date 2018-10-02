@@ -1,6 +1,8 @@
 name: my.super.model
 order: sequence ASC
 description: My Super Model
+rec_name: name
+date_name: date
 fields:
     sequence:
         type: Integer
