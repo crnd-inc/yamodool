@@ -45,12 +45,20 @@ class YAModool(object):
 
         self.model_attrs[compute_fn_name] = compute_method
 
+    def fix_field_attrs(self, field_type, field_attrs):
+        if field_type == 'Datetime' and field_attrs.get('default') == 'now':
+            field_attrs['default'] = odoo.fields.Datetime.now
+        elif field_type == 'Date' and field_attrs.get('default') == 'today':
+            field_attrs['default'] = odoo.fields.Date.today
+        return field_attrs
+
     def add_model_field(self, field_name, field_attrs):
         special = field_attrs.pop('special', None)
         if special and special == 'Counter':
             self.add_field_counter(field_name, field_attrs)
         else:
             field_type = field_attrs.pop('type')
+            field_attrs = self.fix_field_attrs(field_type, field_attrs)
             field_cls = getattr(odoo.fields, field_type)
             self.model_attrs[field_name] = field_cls(**field_attrs)
 

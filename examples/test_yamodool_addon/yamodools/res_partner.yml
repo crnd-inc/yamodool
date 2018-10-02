@@ -1,0 +1,10 @@
+inherit: res.partner
+fields:
+    super_model_ids:
+        type: One2many
+        comodel_name: my.super.model
+        inverse_name: contact_id
+    super_model_count:
+        special: Counter
+        count_field: super_model_ids
+        compute_fn_name: _compute_my_super_model_count

@@ -15,10 +15,19 @@ fields:
         index: true
         translate: true
         help: Record name
+    date:
+        type: Date
+        readonly: true
+        index: true
+        default: today
+    last_modified:
+        type: Datetime
+        readonly: true
+        default: now
     contact_id:
         type: Many2one
         required: true
-        comodel_name: res.users
+        comodel_name: res.partner
     contact_type:
         type: Selection
         selection:
