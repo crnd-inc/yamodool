@@ -68,13 +68,33 @@ class YAModool(object):
                 raise YAModoolError(
                     "Unsupported constraint type %s" % constraint['type'])
 
+    def add_name_attr(self):
+        self.add_optional_attr('_name', 'name')
+        if not self.model_attrs.get('_name'):
+            name = os.path.splitext(os.path.basename(self.file_path))[0]
+            self.model_attrs['_name'] = name.lower().replace('_', '.')
+
     def parse_yml_data(self):
         _logger.info("Parsing yamodool data: %r", self.file_path)
-        self.add_optional_attr('_name', 'name')
+        self.add_name_attr()
         self.add_optional_attr('_order', 'order')
+        self.add_optional_attr('_description', 'description')
+        self.add_optional_attr('_inherit', 'inherit')
         self.add_fields()
         self.add_constraints()
         _logger.info("yamodool data parsed: %r", self.file_path)
+
+    def get_model_class(self):
+        model_type = self.yml_data.get('type', 'model')
+        if model_type == 'model':
+            return odoo.models.Model
+        elif model_type == 'transient':
+            return odoo.models.TransientModel
+        elif model_type == 'abstract':
+            return odoo.models.AbstractModel
+        raise YAModoolError(
+            "Unknown model type. "
+            "Possible values: model, abstract, transient.")
 
     def generate_model(self, module):
         _logger.info("Generating model for yamodool data: %r", self.file_path)
@@ -91,7 +111,7 @@ class YAModool(object):
 
         YAModoolModel = type(
             'yamodool',
-            (odoo.models.Model,),
+            (self.get_model_class(),),
             self.model_attrs
         )
 

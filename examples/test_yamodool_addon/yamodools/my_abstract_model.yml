@@ -1,0 +1,5 @@
+type: abstract
+fields:
+    name:
+        type: Char
+        string: Hello

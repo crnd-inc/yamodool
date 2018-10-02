@@ -1,0 +1,5 @@
+type: transient
+fields:
+    name:
+        type: Char
+        translate: true

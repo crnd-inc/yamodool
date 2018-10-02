@@ -32,6 +32,7 @@ pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
     ```yaml
     name: my.super.model
     order: sequence ASC
+    description: My super model
     fields:
         sequence:
             type: Integer
@@ -76,3 +77,7 @@ pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
     },
     ```
 
+## Examples
+
+There is *examples* firectory in project root, that contains example models.
+Look there for more features.

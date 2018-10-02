@@ -1,6 +1,13 @@
 name: my.model.name.2
+type: model
+inherit:
+    - my.abstract.model
 fields:
     test_field_2:
         type: Many2one
         string: Test relational field
         comodel_name: res.users
+    super_model_id:
+        type: Many2one
+        string: Super Model
+        comodel_name: my.super.model

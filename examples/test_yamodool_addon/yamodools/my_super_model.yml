@@ -1,5 +1,6 @@
 name: my.super.model
 order: sequence ASC
+description: My Super Model
 fields:
     sequence:
         type: Integer
@@ -24,6 +25,10 @@ fields:
             - Address
             - Contact
             - Company
+    model2_ids:
+        type: One2many
+        comodel_name: my.model.name.2
+        inverse_name: super_model_id
 constraints:
     unique_name:
         type: unique
