@@ -29,6 +29,9 @@ fields:
         type: One2many
         comodel_name: my.model.name.2
         inverse_name: super_model_id
+    model2_count:
+        special: Counter
+        count_field: model2_ids
 constraints:
     unique_name:
         type: unique

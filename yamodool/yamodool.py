@@ -30,9 +30,29 @@ class YAModool(object):
         if src_attr in self.yml_data:
             self.model_attrs[dst_attr] = self.yml_data[src_attr]
 
+    def add_field_counter(self, field_name, field_attrs):
+        count_field = field_attrs.pop('count_field')
+        compute_fn_name = field_attrs.pop(
+            'compute_fn_name',
+            '_compute_%s' % field_name)
+        self.model_attrs[field_name] = odoo.fields.Integer(
+            compute=compute_fn_name, **field_attrs)
+
+        @odoo.api.depends(count_field)
+        def compute_method(self):
+            for record in self:
+                record[field_name] = len(record[count_field])
+
+        self.model_attrs[compute_fn_name] = compute_method
+
     def add_model_field(self, field_name, field_attrs):
-        field_cls = getattr(odoo.fields, field_attrs.pop('type'))
-        self.model_attrs[field_name] = field_cls(**field_attrs)
+        special = field_attrs.pop('special', None)
+        if special and special == 'Counter':
+            self.add_field_counter(field_name, field_attrs)
+        else:
+            field_type = field_attrs.pop('type')
+            field_cls = getattr(odoo.fields, field_type)
+            self.model_attrs[field_name] = field_cls(**field_attrs)
 
     def add_fields(self):
         if 'fields' not in self.yml_data:
