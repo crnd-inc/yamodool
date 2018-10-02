@@ -2,6 +2,13 @@
 
 YAML models of Odoo
 
+## WARNING
+
+Current project stage is *Proof of Concept*:
+- no tests,
+- no stability,
+- everything may change next minute
+
 ## Installation
 
 Install with:
@@ -81,3 +88,9 @@ pip install -e git+https://gitlab.crnd.pro/crnd/yamodool#egg=yamodool
 
 There is *examples* firectory in project root, that contains example models.
 Look there for more features.
+
+
+## Goals
+
+The main goal of this project is to separate model definition from python code
+in a way that will not conflict with Odoo.
